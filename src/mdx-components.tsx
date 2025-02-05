@@ -393,7 +393,6 @@ export function useMDXComponents(components: MDXComponents): MDXComponents {
 
 
     table: (params) => {
-      console.log()
       return <Table >{params.children}</Table>;
     },
     thead: (params) => {

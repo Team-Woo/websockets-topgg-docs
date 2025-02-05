@@ -59,7 +59,6 @@ const useHeadings = (content: React.ReactElement<ComponentHeadingProps>) => {
 
             if (HEADING_LEVELS.includes(mdxType as HeadingTag)) {
                 const textContent = getNodeText(props.children)
-                console.log(textContent)
                 headings.push({
                     text: textContent,
                     slug: slugger.slug(textContent),
