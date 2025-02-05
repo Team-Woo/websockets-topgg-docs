@@ -36,7 +36,7 @@ export default function RootLayout({
 				>
 					<NavBar />
 					<Separator />
-					<main className="max-w-screen-2xl flex justify-center mx-auto pt-16">{children}</main>
+					<main className="max-w-(--breakpoint-2xl) flex justify-center mx-auto pt-16">{children}</main>
 				</ThemeProvider>
 			</body>
 		</html>
