@@ -1,0 +1,20 @@
+export const meta = {
+    author: "Woo",
+    title: "Resuming",
+    description: "",
+    keywords: "",
+};
+
+# Resuming
+When you reconnect you can provide a `lastmessagetimestamp` header. If this header is provided, and any messages have been received since the provided timestamp, the server will send all messages that have been received since the provided timestamp. This is useful for catching up on missed events.
+
+## Limitations
+
+### Timeframe
+The resuming system currently stores messages for 6 hours. The goal was to give you plenty of time to discover downtime, and catch up on missed events.
+
+### Repeated messages
+If you provide a timestamp that isnt accurate to your last processed timestamp you may receive duplicate messages. This is because the server will send all messages that have been received since the provided timestamp.
+
+### Message order
+Resumed messages may be sent in any order, you'll need to check the message timestamp and compare it to your stored lastMessageTimestamp. This should be handled inside of libraries.

@@ -1,0 +1,60 @@
+export const meta = {
+  author: "Woo",
+  title: "Types",
+  description: "The documentation for the Javascript library",
+  keywords: "Javascript, typescript, library",
+}; 
+
+# Types
+This document provides an overview of the types used in the library.
+
+## Base Types
+
+### User
+
+| Property Name         | Type          | Description                                   |
+|-----------------------|---------------|-----------------------------------------------|
+| id                    | string        | Unique identifier for the user                |
+| canVoteAt             | Date          | Date when the user is eligible to vote        |
+| overallVotes          | number        | Total votes cast by the user                  |
+| monthlyVotes          | number        | Votes cast by the user in the current month   |
+| streakCount           | number        | Current voting streak count                   |
+| lastVoted             | Date          | Last date when the user voted                 |
+| remindersEnabled      | boolean       | Whether vote reminders are enabled            |
+
+
+### Entity
+
+| Property Name           | Type          | Description                                  |
+|-------------------------|---------------|----------------------------------------------|
+| id                      | string        | Unique identifier for the entity             |
+| overallVotes            | number        | Total votes for the entity                   |
+| monthlyVotes            | number        | Votes for the entity in the current month    |
+| remindersEnabled        | boolean       | Whether reminders are enabled                |
+| remindersBanned         | boolean       | Whether reminders are banned                 |
+| remindersBannedReason   | string        | Reason why reminders are banned              |
+
+### Upvote OR Test
+
+| Property Name       | Type                   | Description                                   |
+|---------------------|------------------------|-----------------------------------------------|
+| user                | [User](#user)          | Reference to the user who voted               |
+| entity              | [Entity](#entity)      | Reference to the entity being voted for       |
+| isWeekend           | boolean                | Whether the vote occurred on a weekend        |
+| query               | string?                | Optional query string (may be undefined)      |
+
+### Reminder
+
+| Property Name       | Type                   | Description                                          |
+|---------------------|------------------------|------------------------------------------------------|
+| user                | [User](#user)          | Reference to the user associated with the reminder   |
+| entity              | [Entity](#entity)      | Reference to the entity associated with the reminder |
+| isWeekend           | boolean                | Whether the reminder is for a weekend                |
+
+### Ready
+
+| Property Name      | Type          | Description                                                         |
+|--------------------|---------------|---------------------------------------------------------------------|
+| name               | string        | The name you provide in the connect function                        |
+| connectionId       | string        | Unique identifier for the connection(generated server side)         |
+| entityId           | string        | Discord ID for the entity                                           |

@@ -1,0 +1,68 @@
+export const meta = {
+    author: "Woo",
+    title: "Resuming",
+    description: "The documentation for the Javascript library",
+    keywords: "Javascript, typescript, library",
+}; 
+
+# Resuming
+Internally the library will resume connections automatically when reconnecting. However if you restart your bot it wont know what the last message timestamp was.
+
+## Saving the most recent timestamp in a text file.
+
+Text files are not the best way to handle this, however it is one of the quickest to implement.
+
+### Basic functions
+
+Using Sync to prevent possible corruption, its really rare. You can use async if you really wanted to.
+
+```js
+function saveLastTimestamp(ts) {
+    if (ts) writeFileSync('./lastTimestamp.txt', ts.toString()); // Write the timestamp to a file
+}
+function loadLastTimestamp() {
+    try {
+        const data = readFileSync('./lastTimestamp.txt', 'utf8'); // Read the timestamp from a file
+        return parseInt(data);
+    } catch (e) {
+
+        return undefined;
+    }
+}
+```
+
+### Connecting by reading the last timestamp
+
+Whenever you connect to the websocket, pass in the last timestamp.
+```js
+topWebsocket.connect(loadLastTimestamp());
+```
+
+
+### Saving the most recent timestamp on message received
+
+Tests, Votes, and Reminder events provide a 'messagetimestamp' parameter to your callback. Make sure to add `saveLastTimestamp` to all of these callbacks.
+
+
+```js
+topWebsocket.on("test", async (testData, messageTimestamp) => {
+    saveLastTimestamp(messageTimestamp);
+    // ... rest of your code ...
+});
+```
+
+
+```js
+topWebsocket.on("vote", async (voteData, messageTimestamp) => {
+    saveLastTimestamp(messageTimestamp);
+    // ... rest of your code ...
+});
+```
+
+
+```js
+topWebsocket.on("reminder", async (reminderData, messageTimestamp) => {
+    saveLastTimestamp(messageTimestamp);
+    // ... rest of your code ...
+});
+```

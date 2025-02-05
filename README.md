@@ -1,36 +1,25 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Docs.websockets-topgg.com
 
-## Getting Started
+This is the docs for websocket-topgg.com, its in early stages right now.
 
-First, run the development server:
+## Structure
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+The goal is to use entirely SSG/Static pages.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Inside of `src/app` contains the dynamic routes, routes use generateStaticParams.
+Inside of `src/docs` contains the static markdown files that are converted into pages. The file structure tells routes how to organize them.
+Docs are organized as `/category/version/pages` The files in side the version are named in a specific way. `index.mdx` is the main route, other files start with `xx-` where xx is a number, its followed by the page name.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Contributing
+When contributing make sure to only modify the docs or pages.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+## To Do
+- Add more of a guide format
+- Update select-version and select-platform to be dynamic.
+- Clean up old code from older versions
+- Fix mdx-components(this is a mismash of old and new components)
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

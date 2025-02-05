@@ -1,0 +1,82 @@
+export const meta = {
+  author: "Woo",
+  title: "Types",
+  description:
+    "The API Responses and Request types for the Prerelease API. This includes the endpoints and the data that is returned from them.",
+  keywords: [
+    "api",
+    "prerelease",
+    "endpoints",
+  ],
+};
+
+# API response types/responses
+
+<ApiType
+  title="Entity"
+  description="The entity Object returned from some endpoints."
+  typeProperties={[
+    {
+      name: "id",
+      type: "string",
+      description: "The Discord ID of the entity."
+    },
+    {
+      name: "overallVotes",
+      type: "number",
+      description: "The overall votes of the entity."
+    },
+    {
+      name: "monthlyVotes",
+      type: "number",
+      description: "The monthly votes of the entity."
+    },
+    {
+      name: "remindersEnabled",
+      type: "boolean",
+      description: "Whether user reminders are sent for the entity."
+    }
+  ]}
+/>
+
+<ApiType
+  title="User"
+  description="The User Object returned from some endpoints."
+  typeProperties={[
+    {
+      name: "id",
+      type: "string",
+      description: "The Discord ID of the user."
+    },
+    {
+      name: "overallVotes",
+      type: "number",
+      description: "The overall votes of the user."
+    },
+    {
+      name: "monthlyVotes",
+      type: "number",
+      description: "The monthly votes of the user."
+    },
+    {
+      name: "streakCount",
+      type: "number",
+      description: "The streak count of the user."
+    },
+    {
+      name: "lastVoted",
+      type: "Date",
+      description: "The last date the user voted."
+    },
+    {
+      name: "canVoteAt",
+      type: "Date",
+      description: "The date the user can vote at again."
+    },
+    {
+      name: "remindersEnabled",
+      type: "boolean",
+      description: "Whether reminders are enabled for the user."
+    }
+  ]}
+/>

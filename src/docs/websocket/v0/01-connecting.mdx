@@ -1,0 +1,41 @@
+export const meta = {
+  author: "Woo",
+  title: "Connecting",
+  description: "",
+  keywords: "",
+};
+
+
+
+# Connecting to the websocket server
+
+When you connect to the websocket server the websocket server will instantly upgrade the request to a websocket connection. If your websocket Authorization header is invalid, the server will instantly close the connection with a 4007 status code.
+This status code indicates that the client is not authorized to connect to the websocket server and should not attempt to reconnect.
+
+## Connection URL
+~~~
+wss://api.websockets-topgg.com/v0/websocket
+~~~
+
+## Headers
+When connecting a websocket you will need to provide headers:
+| Parameter      | Optional       | Description                                                                                 |
+|----------------|----------------|---------------------------------------------------------------------------------------------|
+| `Authorization`       |   false | This is your token found in the dashboard. This is the same token you use for the REST API. |
+| `name`                |   true  | this is the name of the websocket instance.                                       |
+| `lastmessagetimestamp`|   true  | If your connection disconnected this is the timestamp of the last processed message, all messages after this timestamp will be sent after the ready message |
+| `resume`              |   true  | This probably shouldnt be used, resume is presumed to be true when lastmessagetimestamp is provided                                       |
+
+## Ready response
+When your connection is successfully established, the server will send a `ready` event. This event will contain the following data:
+<SyntaxHighlighter language={"json"} customStyle={{ borderRadius: "0.25rem" }}>
+{`{
+    "op": 3,
+    "d": {
+      name: string,
+      connectionId: string,
+      entityId: string,
+    }
+}`}
+</SyntaxHighlighter>
+When the ready event is received you should start receiving the other messages from the server.

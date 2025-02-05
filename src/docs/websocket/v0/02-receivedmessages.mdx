@@ -1,0 +1,229 @@
+export const meta = {
+  author: "Woo",
+  title: "Received messages",
+  description: "",
+  keywords: "",
+};
+
+# Received messages
+
+All received messages will have the same basic data structure
+
+<SyntaxHighlighter language="json" customStyle={{ borderRadius: "0.25rem" }}>
+{`{
+  "op": "number",
+  "d": "object",
+  "ts?": "number"
+}
+`}
+</SyntaxHighlighter>
+Data will depend on the specific message type, as described below.  
+
+<WebsocketReceivedMessage 
+  title="Ready"
+  description="When your websocket is ready, you wont receive any requests before the websocket is ready."
+  opcode={3}
+  responseProperties={{
+    name: {
+      type: "string",
+      description: "The name of the websocket you provided in the connection header."
+    },
+    connectionId: {
+      type: "string",
+      description: "The ID of the new connection, will be a UUIDv4. Looks like this: 36b8f84d-df4e-4d49-b662-bcde71a8764f. I reccomend you log this when you receive the ready message for debugging."
+    },
+    entityId: {
+      type: "string",
+      description: "The ID of the entity that is associated with the websocket, while you should hopefully know this I provide it anyway."
+    }
+  }}
+  example={`{
+  "name": "Website",
+  "connectionId": "36b8f84d-df4e-4d49-b662-bcde71a8764f",
+  "entityId": "1013858325789671480"
+}`}
+/>
+
+
+<WebsocketReceivedMessage 
+  title="Upvote"
+  description="When a user votes, you will receive a WebSocket message in the following format:"
+  opcode={10}
+  responseProperties={{
+    user: {
+      type: "object",
+      description: "The user who voted.",
+      properties: [
+        { name: "id", type: "string", description: "The ID of the user." },
+        { name: "canVoteAt", type: "string", description: "The next date the user can vote." },
+        { name: "overallVotes", type: "number", description: "The overall votes of the user." },
+        { name: "monthlyVotes", type: "number", description: "The monthly votes of the user." },
+        { name: "streakCount", type: "number", description: "The streak count of the user." },
+        { name: "lastVoted", type: "string", description: "The last date the user voted." },
+        { name: "remindersEnabled", type: "boolean", description: "Whether reminders are enabled for the user." }
+      ]
+    },
+    entity: {
+      type: "object",
+      description: "The entity that the user voted on.",
+      properties: [
+        { name: "id", type: "string", description: "The ID of the entity." },
+        { name: "overallVotes", type: "number", description: "The overall votes of the entity." },
+        { name: "monthlyVotes", type: "number", description: "The monthly votes of the entity." },
+        { name: "remindersEnabled", type: "boolean", description: "Whether reminders are enabled for the entity." },
+        { name: "remindersBanned", type: "boolean", description: "If your bot had its reminders disabled by staff"},
+        { name: "remindersBannedReason", type: "string", description: "If your reminders are disabled the reason will be provided here"}
+      ]
+    },
+    isWeekend: {
+      type: "boolean",
+      description: "Whether the vote occurred on a weekend."
+    },
+    "query?": {
+      type: "string",
+      description: "The Query string on the /bot/:ID/vote page."
+    }
+  }}
+  example={`{
+  "user": {
+    "id": "136583532972605440",
+    "overallVotes": 34,
+    "monthlyVotes": 13,
+    "streakCount": 13,
+    "lastVoted": "2024-02-22T01:52:41.539Z",
+    "remindersEnabled": true,
+    "canVoteAt": "2024-02-22T13:52:41.539Z"
+  },
+  "entity": { 
+    "id": "1013858325789671481",
+    "overallVotes": 450,
+    "monthlyVotes": 54,
+    "remindersEnabled": true,
+    "remindersBanned": false,
+    "remindersBannedReason": ""
+  },
+  "isWeekend": false,
+  "query": "?testquery=hi&Wee=Woo"
+}`}
+/>
+
+
+<WebsocketReceivedMessage 
+  title="Test"
+  description="When you press the test button on Top.gg, I may add a test button on the dashboard too. You will receive a WebSocket message in the following format:"
+  opcode={11}
+  responseProperties={{
+    user: {
+      type: "object",
+      description: "The user who voted.",
+      properties: [
+        { name: "id", type: "string", description: "The ID of the user." },
+        { name: "canVoteAt", type: "string", description: "The next date the user can vote." },
+        { name: "overallVotes", type: "number", description: "The overall votes of the user." },
+        { name: "monthlyVotes", type: "number", description: "The monthly votes of the user." },
+        { name: "streakCount", type: "number", description: "The streak count of the user." },
+        { name: "lastVoted", type: "string", description: "The last date the user voted." },
+        { name: "remindersEnabled", type: "boolean", description: "Whether reminders are enabled for the user." }
+      ]
+    },
+    entity: {
+      type: "object",
+      description: "The entity that the user voted on.",
+      properties: [
+        { name: "id", type: "string", description: "The ID of the entity." },
+        { name: "overallVotes", type: "number", description: "The overall votes of the entity." },
+        { name: "monthlyVotes", type: "number", description: "The monthly votes of the entity." },
+        { name: "remindersEnabled", type: "boolean", description: "Whether reminders are enabled for the entity." },
+        { name: "remindersBanned", type: "boolean", description: "If your bot had its reminders disabled by staff"},
+        { name: "remindersBannedReason", type: "string", description: "If your reminders are disabled the reason will be provided here"}
+      ]
+    },
+    isWeekend: {
+      type: "boolean",
+      description: "Whether the vote occurred on a weekend."
+    },
+    "query?": {
+      type: "string",
+      description: "The Query string on the /bot/:ID/vote page."
+    }
+  }}
+  example={`{
+  "user": {
+    "id": "136583532972605440",
+    "overallVotes": 34,
+    "monthlyVotes": 13,
+    "streakCount": 13,
+    "lastVoted": "2024-02-22T01:52:41.539Z",
+    "remindersEnabled": true,
+    "canVoteAt": "2024-02-22T13:52:41.539Z"
+  },
+  "entity": { 
+    "id": "1013858325789671481",
+    "overallVotes": 450,
+    "monthlyVotes": 54,
+    "remindersEnabled": true,
+    "remindersBanned": false,
+    "remindersBannedReason": ""
+  },
+  "isWeekend": false,
+  "query": "?testquery=hi&Wee=Woo"
+}`}
+/>
+
+
+<WebsocketReceivedMessage 
+  title="Reminder"
+  description="When a user can be reminded to vote. Note: Your bot must follow top.gg guidelines, you must also enable this when you create your websocket, or enable it on the dashboard. You will receive a WebSocket message in the following format:"
+  opcode={12}
+  responseProperties={{
+    user: {
+      type: "object",
+      description: "The user who voted.",
+      properties: [
+        { name: "id", type: "string", description: "The ID of the user." },
+        { name: "canVoteAt", type: "string", description: "The next date the user can vote." },
+        { name: "overallVotes", type: "number", description: "The overall votes of the user." },
+        { name: "monthlyVotes", type: "number", description: "The monthly votes of the user." },
+        { name: "streakCount", type: "number", description: "The streak count of the user." },
+        { name: "lastVoted", type: "string", description: "The last date the user voted." },
+        { name: "remindersEnabled", type: "boolean", description: "Whether reminders are enabled for the user." }
+      ]
+    },
+    entity: {
+      type: "object",
+      description: "The entity that the user voted on.",
+      properties: [
+        { name: "id", type: "string", description: "The ID of the entity." },
+        { name: "overallVotes", type: "number", description: "The overall votes of the entity." },
+        { name: "monthlyVotes", type: "number", description: "The monthly votes of the entity." },
+        { name: "remindersEnabled", type: "boolean", description: "Whether reminders are enabled for the entity." },
+        { name: "remindersBanned", type: "boolean", description: "If your bot had its reminders disabled by staff"},
+        { name: "remindersBannedReason", type: "string", description: "If your reminders are disabled the reason will be provided here"}
+      ]
+    },
+    isWeekend: {
+      type: "boolean",
+      description: "If its currently the weekend, users who vote at this time get two votes, your bot on top.gg also gets 2 votes."
+    }
+  }}
+  example={`{
+  "user": {
+    "id": "136583532972605440",
+    "overallVotes": 34,
+    "monthlyVotes": 13,
+    "streakCount": 13,
+    "lastVoted": "2024-02-22T01:52:41.539Z",
+    "remindersEnabled": true,
+    "canVoteAt": "2024-02-22T13:52:41.539Z"
+  },
+  "entity": { 
+    "id": "1013858325789671481",
+    "overallVotes": 450,
+    "monthlyVotes": 54,
+    "remindersEnabled": true,
+    "remindersBanned": false,
+    "remindersBannedReason": ""
+  },
+  "isWeekend": false
+}`}
+/>

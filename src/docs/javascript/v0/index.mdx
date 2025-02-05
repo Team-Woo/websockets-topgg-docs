@@ -1,0 +1,31 @@
+export const meta = {
+  author: "Woo",
+  title: "Getting Started",
+  description: "The documentation for the Javascript library",
+  keywords: "Javascript, typescript, library",
+}; 
+
+# Websockets-topgg
+
+## Installation
+
+<SyntaxHighlighter language={"bash"} customStyle={{ borderRadius: "0.25rem" }}>
+{`npm install websockets-topgg`}
+</SyntaxHighlighter>
+
+## Basic setup
+
+
+~~~js
+import { TopWebsocket } from "websockets-topgg";
+
+const topWebsocket = new TopWebsocket(WEBSOCKET_TOKEN, {
+  name: "Bot-Websocket",
+});
+
+topWebsocket.connect();
+
+topWebsocket.on("test", async (vote) => {
+  console.log(`User: ${vote.user.id} just tested!`);
+});
+~~~

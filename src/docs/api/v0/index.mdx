@@ -1,0 +1,34 @@
+export const meta = {
+  author: "Woo",
+  title: "Getting started",
+  description:
+    "Getting started with the api.",
+  keywords: [
+    "api",
+    "prerelease",
+    "getting started",
+    "raw api",
+    "library developers",
+    "experinced developers",
+  ],
+};
+
+# Introduction
+
+Welcome to the API Docs. This page will cover the basic structure of API requests.
+
+## Base URL
+The base url is <Highlight>https://websockets-beta.webhook-topgg.com/api/</Highlight>
+
+## Headers
+
+### Authorization
+
+Every API request will require an API token for the specific Websocket you're using, you can find the API token in the [dashboard](https://websockets-beta.webhook-topgg.com/dashboard). 
+The token will be needed in the <Highlight>Authorization</Highlight> header of the request.
+
+If the Authorization header isnt provided the request will be rejected with a 401 status code.
+
+### Content-Type
+
+The Content-Type header is required for every <Highlight>Post</Highlight> request, the value should be <Highlight>application/json</Highlight>.

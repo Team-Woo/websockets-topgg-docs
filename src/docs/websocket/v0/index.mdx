@@ -1,0 +1,41 @@
+export const meta = {
+    author: "Woo",
+    title: "Getting started",
+    description: "",
+    keywords: "",
+};
+
+# Websockets
+
+Welcome to the websocket docs, websockets can be fairly complex. My goal when designing the websocket infrastructure was to make it as simple as I possibly could.
+On this page we will cover the basics of our websockets. 
+
+
+## Messages
+Our messages are quite simple. All messages will have the same basic data structure.
+
+<SyntaxHighlighter language="json" customStyle={{ borderRadius: "0.25rem" }}>
+{`{
+    "op": number,
+    "d": Object,
+    "ts?": String
+}
+`}
+</SyntaxHighlighter>
+
+
+### Opcodes
+| Name | Number |
+|------|-------|
+| Ready |  3 |
+| Vote |  10 |
+| Test | 11   |
+| Reminder | 12 |
+
+
+### Data
+Data is always an object, the data will depend on the opcode. The data will be described in the specific opcode documentation.
+
+
+### Timestamp
+The timestamp is only provided on specific Opcodes. Vote, Test, and Reminder Opcodes will have a timestamp. The timestamp is the time the message was sent. This is used for getting all missed events while your connection was down.

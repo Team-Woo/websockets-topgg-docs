@@ -1,0 +1,101 @@
+export const meta = {
+  author: "Woo",
+  title: "Events",
+  description: "The documentation for the Javascript library",
+  keywords: "Javascript, typescript, library",
+}; 
+
+# Events list
+
+<LibEvent 
+  title="Ready"
+  description="Emitted when the websocket client is ready. Once this even is fired it will begin receiving other events."
+  parameters={[
+    {
+      name: "ready",
+      type: "Ready",
+      link: "/javascript/v0/types#ready"
+    }
+    ]}
+  example={`topWebsocket.on("ready", (readyData) => {
+    console.log("Top.gg websocket is ready!");
+});`}
+
+  anchor="Ready" />
+
+
+<LibEvent 
+  title="Vote"
+  description="When a user votes, you will receive a 'vote' event"
+  parameters={[{
+     name: "vote",
+     type: "Vote",
+     link: "/javascript/v0/types#upvote-or-test"
+  },
+  {
+    name: "messageTs",
+    type: "number"
+  },
+  {
+    name: "lastMessageTs",
+    type: "number"
+  }
+  ]}
+  example={`topWebsocket.on("vote", (voteData) => {
+    console.log(voteData);
+});
+`}
+  anchor="Vote"
+/>
+
+
+<LibEvent 
+  title="Test"
+  description="When you press a test button, you will receive a 'test' event"
+  parameters={[{
+     name: "testVote",
+     type: "Vote",
+     link: "/javascript/v0/types#upvote-or-test"
+  },
+  {
+    name: "messageTs",
+    type: "number"
+  },
+  {
+    name: "lastMessageTs",
+    type: "number"
+  }
+  ]}
+  example={`topWebsocket.on("test", (testData) => {
+    console.log(testData);
+});
+`}
+
+  anchor="Test"
+/>
+
+
+<LibEvent 
+  title="Reminder"
+  description="When a user can be reminded to vote. Note: Your bot must follow top.gg guidelines, you must also enable this when you create your websocket, or enable it on the dashboard."
+  parameters={[
+    {
+      name: "reminder",
+      type: "Reminder",
+      link: "http://localhost:3000/javascript/v0/types#reminder"
+    },
+      {
+    name: "messageTs",
+    type: "number"
+  },
+  {
+    name: "lastMessageTs",
+    type: "number"
+  }
+  ]}
+  example={`topWebsocket.on("reminder", (reminderData) => {
+    console.log(reminderData);
+});`}
+
+  anchor="Reminder"
+/>

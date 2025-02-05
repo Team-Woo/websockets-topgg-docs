@@ -1,0 +1,46 @@
+.markdown h1:not(.ignore-markdown) {
+  margin-bottom: 0.8888889em;
+}
+
+.markdown h2:not(.ignore-markdown) {
+  border-top-style: solid;
+  border-top-width: 1px;
+  padding-top: 2.5rem;
+  scroll-margin-top: 60px;
+  margin-top: 2em;
+  margin-bottom: 1em;
+}
+
+.markdown h3:not(.ignore-markdown) {
+  scroll-margin-top: 11px;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+:target {
+  border-radius: 3px;
+  animation: highlight 1000ms ease-out;
+}
+
+@keyframes highlight {
+  0% {
+    color: hsl(var(--primary));
+  }
+
+  100% {
+    color: inherit;
+  }
+}
+
+.markdown a {
+  color: hsl(var(--primary));
+  transition: color 0.2s ease;
+}
+
+.markdown :where([data-docs-heading]) a {
+  color: inherit;
+}
+
+.markdown a:hover {
+  color: hsl(var(--primary-hover));
+}

@@ -1,0 +1,155 @@
+export const meta = {
+    author: "Woo",
+    title: "Discord JS Setup",
+    description: "The documentation for the Javascript library",
+    keywords: "Javascript, typescript, library, Discordjs",
+}; 
+
+# Setup With Discordjs
+
+## Base Setup
+
+<SyntaxHighlighter language={"js"} customStyle={{ borderRadius: "0.25rem" }}>
+{`import 'dotenv/config'
+
+import { TopWebsocket } from "websockets-topgg";
+import { Client, GatewayIntentBits, MessageFlags } from "discord.js";
+
+// Initilize and login to djs
+const client = new Client(...);
+client.login(process.env.DISCORD_TOKEN);
+
+// initilize websocket
+const topWebsocket = new TopWebsocket(process.env.WEBSOCKETS_TOKEN);
+
+client.on('ready', async () => {
+    console.log('djs client ready!');
+    // wait for discord client to be ready before connecting to the websocket
+    topWebsocket.connect();
+});`}
+</SyntaxHighlighter>
+
+
+## Dming users on votes or test votes
+This code block will send a dm to the user who voted on your bot. It also includes some basic information about the user's voting streak and votes for the month. You can find more about the data of this [event here](/javascript/v0/events#upvote-and-test)
+
+~~~js
+topWebsocket.on("vote", async (voteData) => {
+    // get the user from discord, if the user is undefined return.
+    const user = await client.users.fetch(voteData.user.id);
+    if (!user) return;
+
+    // send a dm to the user.
+    user.send({
+        embeds: [{
+            color: "65280",
+            title: "Thanks for voting!",
+            fields: [
+                { name: "Vote Streak", value: voteData.user.streakCount, inline: true },
+                { name: "Votes this Month", value: voteData.user.monthlyVotes, inline: true },
+                { name: "Overall Votes", value: voteData.user.overallVotes, inline: true },
+                { name: "You can vote again at", value: `<t:${Math.floor(new Date(voteData.user.canVoteAt).getTime() / 1000)}:R>` }
+            ]
+        }]
+    });
+});
+
+~~~
+
+## Handling reminders
+
+Reminders can increase the number of return voters on [Top.gg](https://top.gg). This event will allow you to send a DM to the user with a link to your bots voting page reminding them to vote again. New voters will be opted-in automatically as long as your entitiy has reminders enabled. You can enable this on the [dashboard](https://websockets-topgg.com/dashboard).
+It's important to follow [Top.gg Guidelines](https://support.top.gg/support/solutions/articles/73000502502-bot-guidelines#:~:Bots%20that%20provide%20voting%20reminders%20must%20allow%20users%20to%20unsubscribe%20from%20them%20and%20must%20specify%20how%20to%20do%20so%20in%20the%20notification) so `you must provide a way for users to unsubscribe from the reminders`.
+
+~~~js
+topWebsocket.on("reminder", async (reminderData) => {
+// get the user from discord, if the user is undefined return.
+    const user = await client.users.fetch(reminderData.user.id);
+    if (!user) return;
+    // send the user a dm
+    user.send({
+        embeds: [{
+            color: "65280",
+            title: "You can vote again!",
+            url: "https://top.gg/bot/918872882472439838/vote?referer=bot-reminder",
+            fields: [
+                { name: "Vote Streak", value: reminderData.user.streakCount, inline: true },
+                { name: "Votes this Month", value: reminderData.user.monthlyVotes, inline: true },
+                { name: "Overall Votes", value: reminderData.user.overallVotes, inline: true },
+            ]
+        }],
+        /*
+            Its important to follow Top.gg guidelines
+            Top.gg guidelines require you to include the ability to opt-out of reminders, and include instructions on how to opt-out of reminders.
+            Including buttons to opt-out is the easiest way to comply with the guidelines!
+        */
+        components: [
+            {
+                type: 1,
+                components: [
+                    // the first button is a link to your vote page.
+                    {
+                        type: 2,
+                        label: "Vote Now",
+                        url: "https://top.gg/bot/918872882472439838/vote?referer=bot-reminder",
+                        style: 5,
+                    },
+                    {
+                        type: 2,
+                        label: "Disable Reminders",
+                        custom_id: "ws-disableReminders",
+                        style: 4
+                    },
+                    {
+                        type: 2,
+                        label: "Enable Reminders",
+                        custom_id: "ws-enableReminders",
+                        style: 3
+                    }
+                ]
+            }
+        ]
+    });
+});
+~~~
+
+
+### Adding the button interaction system
+
+Now that we have our buttons, we need to add a listener for them. We can do this by adding an event listener to the `interactionCreate`.
+
+
+The below code is checking for if the interaction is a button, and then checking if it starts with "ws-". If it does, then we can handle the interaction accordingly.
+<SyntaxHighlighter language={"js"} customStyle={{ borderRadius: "0.25rem" }}>
+{`client.on("interactionCreate", async (interaction) => {
+    if (!interaction.isButton()) return;
+
+    /*
+        Both interaction buttons in the reminder message start with ws-
+        This allows us easily determine if the interaction is specifically for a reminder button.
+    */
+    if (interaction.customId.startsWith("ws-")) {
+        /*
+         We know this interaction is someone opting in or out of reminders.
+         We're fetching the user from the local cache(or the API if they're not in the cache yet)
+         If the user couldnt be found in either we cant enable/disable reminders.
+         By using cache we can reduce the number of API calls we make.
+        */
+        const user = await topWebsocket.getUser(interaction.user.id).catch((e) => null);
+        if (!user) return interaction.reply({ content: "Could not enable/disable reminders!", flags: MessageFlags.Ephemeral }); 
+
+
+        if (interaction.customId === "ws-disableReminders") {
+            if (!user.remindersEnabled) return interaction.reply({ content: "You already have reminders disabled!", flags: MessageFlags.Ephemeral });
+            await topWebsocket.setReminders(interaction.user.id, false);
+            await interaction.reply({ content: "Reminder disabled!", flags: MessageFlags.Ephemeral });
+        }
+        else if (interaction.customId === "ws-enableReminders") {
+            if (user.remindersEnabled) return interaction.reply({ content: "You already have reminders enabled!", flags: MessageFlags.Ephemeral });
+            await topWebsocket.setReminders(interaction.user.id, true);
+            await interaction.reply({ content: "Reminder enabled!", flags: MessageFlags.Ephemeral });
+        }
+    }
+});
+`}
+</SyntaxHighlighter>
